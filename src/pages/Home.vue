@@ -5,7 +5,7 @@
     </h1>
     <p>Turn: {{gameState.turn}}</p>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-8">
         <c-map :map="game.map"></c-map>
       </div>
     </div>

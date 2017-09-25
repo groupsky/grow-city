@@ -1,71 +1,155 @@
 <style scoped="true" lang="less">
-  .tile {
-    display: inline-block;
-    /*border: 1px solid darkcyan;*/
-    position: relative;
-    box-sizing: border-box;
-  }
-
-  svg {
-    position: absolute;
-    width: 64px;
-    height: 72px;
-    left: 0;
-    top: -16px;
-  }
-
-  .svg-tile {
-    stroke: transparent;
-    fill: transparent;
-    z-index: -100;
-  }
-
-  .type {
-    display: block;
-    text-align: center;
+  .tile-container {
     width: 100%;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    height: 100%;
+  }
+
+  .layer {
     position: absolute;
-    z-index: 10;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .background {
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  .fog {
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .owned .fog {
+    visibility: hidden;
   }
 
   .type-plain {
-    fill: lightgray;
+    background: rgba(85, 120, 85, 1);
+    fill: rgba(85, 120, 85, 1);
   }
+
   .type-hill {
-    fill: darkgray;
+    background: rgba(85, 140, 35, 1);
+    fill: rgba(85, 140, 35, 1);
   }
+
   .type-mountain {
-    fill: black;
+    background: rgba(125, 100, 95, 1);
+    fill: rgba(125, 100, 95, 1);
   }
+
   .type-grass {
+    background: green;
     fill: green;
   }
+
+  .features {
+
+  }
+
+  .features > *:before {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    margin-top: -16px;
+    font-weight: normal;
+    text-shadow: 0 0 0 black;
+  }
+
+  .river:before {
+    content: "♒";
+    color: #13e;
+  }
+
+  .features > .forest:before {
+    content: "🌲";
+    color: transparent;
+    text-shadow: 24px 12px 0 #292, 24px 12px 0 black,
+    20px -16px 0 #292, 20px -16px 0 black,
+    -14px 22px 0 #292, -14px 22px 0 black,
+    -26px -10px 0 #292, -26px -10px 0 black;
+  }
+
+  .worked {
+    display: table-cell;
+    text-align: center;
+  }
+
+  .worked:before {
+    content: "👷";
+    color: #ccc;
+    font-weight: normal;
+    text-shadow: 0 0 0 black;
+  }
+
+  .improvement:before {
+    position: absolute;
+    font-size: 24px;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    margin-top: -24px;
+    font-weight: normal;
+    text-shadow: 0 0 1px black;
+  }
+
+  .improvement-city:before {
+    content: "🏙";
+    font-size: 36px;
+    margin-top: -42px;
+    color: #cc5;
+  }
+
+  .improvement-factory:before {
+    content: "🏭";
+    color: #787;
+  }
+
 </style>
 
 <template>
-  <div class="tile">
-    <svg width="64" height="72" viewBox="0 0 64 72"
-         xmlns="http://www.w3.org/2000/svg">
-      <polygon class="svg-tile" :class="backgroundClass" points="0,48 32,72 64,48 64,24 32,0 0,24"/>
-    </svg>
-    <span class="type">{{tile.type}}</span>
+  <div class="tile-container" :class="{owned: tile.owned}">
+    <div class="layer background" :class="backgroundClass"></div>
+    <div class="layer features">
+      <div class="river" v-if="tile.river"></div>
+      <div class="forest" v-if="tile.forest"></div>
+    </div>
+    <div class="layer improvements">
+      <div :class="improvementClass"></div>
+    </div>
+    <div class="layer worked" v-if="worked"></div>
+    <div class="layer fog"></div>
   </div>
 </template>
 
 <script>
-    export default {
-      name: 'tile',
-      props: {
-        tile: {
-          required: true
-        }
+  export default {
+    name: 'tile',
+    props: {
+      tile: {
+        required: true
       },
-      computed: {
-        backgroundClass() {
-          return 'type-'+this.tile.type
-        }
+      improvement: {},
+      worked: {
+        type: Boolean,
+        default: false,
+      }
+    },
+    computed: {
+      backgroundClass() {
+        return 'type-' + this.tile.type
+      },
+      improvementClass() {
+        return [
+          'improvement',
+          'improvement-' + ((this.tile.city) ? 'city' : (this.tile.factory ? 'factory' : ''))
+        ]
       }
     }
+  }
 </script>
