@@ -1,20 +1,30 @@
 <template>
   <div>
-    <h1>Home</h1>
-    <p>Ticks: {{tickCounter}}</p>
+    <h1>Home
+      <button @click="endTurn">End Turn</button>
+    </h1>
+    <p>Turn: {{gameState.turn}}</p>
+    <div class="row">
+      <div class="col-md-6">
+        <c-map :map="game.map"></c-map>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import cMap from '../components/Map.vue'
+
   export default {
     name: 'home',
     inject: [ 'game' ],
+    components: { cMap },
     data () {
-      return { tickCounter: 0 }
+      return { gameState: this.game.state }
     },
-    watch: {
-      'game.tick' (tickCounter) {
-        this.tickCounter = tickCounter
+    methods: {
+      endTurn() {
+        this.game.endTurn()
       }
     }
   }
