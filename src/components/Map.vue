@@ -67,16 +67,12 @@
 
 <template>
   <ul class="map">
-    <template v-for="(row, r) in map.tiles">
-      <template v-for="(tile, q) in row">
+    <template v-for="row in map.tiles">
+      <template v-for="tile in row">
         <li class="tile">
           <div class="tile-in">
             <div class="tile-inside">
-            <template v-if="tile">
-              <!--<div style="background:red;position: absolute;width:100%;height:100%;"></div>-->
-              <c-tile :tile="tile" :worked="isWorked(r,q)"></c-tile>
-            </template>
-            <!--<div style="background:black;position: absolute;width:100%;height:100%;" v-if="!tile"></div>-->
+              <c-tile v-if="tile" :tile="tile" @clicked="toggleWorked(tile)"></c-tile>
             </div>
           </div>
         </li>
@@ -89,6 +85,7 @@
   import cTile from './Tile.vue'
   export default {
     name: 'map',
+    inject: ['game'],
     components: { cTile },
     props: {
       map: {
@@ -96,24 +93,8 @@
       }
     },
     methods: {
-      rowWidth(row) {
-        let cnt = 0
-        for (let q in row) {
-          if (row[ q ]) cnt++
-        }
-        return {
-          width: (cnt * 64) + "px",
-        }
-      },
-      spacerStyles(r) {
-        const half = r & 1
-        const cnt = (r - 6) / 2
-        return {
-          "flex-basis": (cnt * 128 + half * 64) + "px"
-        }
-      },
-      isWorked(r, q) {
-        return r == 4 && q == 3;
+      toggleWorked(tile) {
+        this.game.toggleWorkedTile(tile)
       }
     }
   }

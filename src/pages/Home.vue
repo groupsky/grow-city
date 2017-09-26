@@ -5,8 +5,14 @@
     </h1>
     <p>Turn: {{gameState.turn}}</p>
     <div class="row">
+      <div class="col-md-12">
+        <c-res-bar></c-res-bar>
+      </div>
+      <div class="col-md-12">
+        <c-pop-bar></c-pop-bar>
+      </div>
       <div class="col-md-8">
-        <c-map :map="game.map"></c-map>
+        <c-map :map="map"></c-map>
       </div>
     </div>
   </div>
@@ -14,13 +20,18 @@
 
 <script>
   import cMap from '../components/Map.vue'
+  import cPopBar from '../components/PopulationBar.vue'
+  import cResBar from '../components/ResourcesBar.vue'
 
   export default {
     name: 'home',
     inject: [ 'game' ],
-    components: { cMap },
+    components: { cMap, cPopBar, cResBar },
     data () {
-      return { gameState: this.game.state }
+      return {
+        gameState: this.game.state,
+        map: this.game.map,
+      }
     },
     methods: {
       endTurn() {

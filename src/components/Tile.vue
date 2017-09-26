@@ -113,16 +113,21 @@
 </style>
 
 <template>
-  <div class="tile-container" :class="{owned: tile.owned}">
-    <div class="layer background" :class="backgroundClass"></div>
+  <div class="tile-container" :class="{owned: tile.owned}" @click="handleClick">
+    <div class="layer background" :class="'type-'+tile.type"></div>
     <div class="layer features">
-      <div class="river" v-if="tile.river"></div>
-      <div class="forest" v-if="tile.forest"></div>
+      <div v-for="(available, feature) in tile.features"
+           v-if="available"
+           class="feature"
+           :class="'feature-'+feature"></div>
     </div>
     <div class="layer improvements">
-      <div :class="improvementClass"></div>
+      <div v-for="(available, improvement) in tile.improvements"
+           v-if="available"
+           class="improvement"
+           :class="'improvement-'+improvement"></div>
     </div>
-    <div class="layer worked" v-if="worked"></div>
+    <div class="layer worked" v-if="tile.worked"></div>
     <div class="layer fog"></div>
   </div>
 </template>
@@ -135,20 +140,10 @@
         required: true
       },
       improvement: {},
-      worked: {
-        type: Boolean,
-        default: false,
-      }
     },
-    computed: {
-      backgroundClass() {
-        return 'type-' + this.tile.type
-      },
-      improvementClass() {
-        return [
-          'improvement',
-          'improvement-' + ((this.tile.city) ? 'city' : (this.tile.factory ? 'factory' : ''))
-        ]
+    methods: {
+      handleClick() {
+        this.$emit('clicked')
       }
     }
   }
