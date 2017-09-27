@@ -13,8 +13,16 @@
     content: "👩"
   }
 
+  .pop-worker {
+    color: #1e7e34;
+  }
+
   .pop-worker:after {
-    content: "🌾"
+    content: "🌾";
+  }
+
+  .pop-unemployed {
+    color: #c82333;
   }
 
 </style>
