@@ -61,12 +61,12 @@
     text-shadow: 0 0 0 black;
   }
 
-  .river:before {
+  .feature-river:before {
     content: "♒";
     color: #13e;
   }
 
-  .features > .forest:before {
+  .features > .feature-forest:before {
     content: "🌲";
     color: transparent;
     text-shadow: 24px 12px 0 #292, 24px 12px 0 black,
@@ -129,6 +129,7 @@
     </div>
     <div class="layer worked" v-if="tile.worked"></div>
     <div class="layer fog"></div>
+    <div class="layer highlight"></div>
   </div>
 </template>
 
