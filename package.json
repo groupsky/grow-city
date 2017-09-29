@@ -34,7 +34,7 @@
     "vueify": "^9.4.0"
   },
   "dependencies": {
-    "bootstrap-vue": "^0.16.1",
+    "bootstrap-vue": "^1.0.0-beta.9",
     "bulk-require": "^1.0.0",
     "bulkify": "^1.4.2",
     "cp-cli": "^1.0.2",
