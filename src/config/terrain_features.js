@@ -1,13 +1,13 @@
 export default {
   river: {
     effects: {
-      food: 1,
-      gold: 1,
+      food: { add: 1 },
+      gold: { add: 1 },
     },
   },
   forest: {
     effects: {
-      production: 1,
+      production: { add: 1 },
     },
   },
 }
