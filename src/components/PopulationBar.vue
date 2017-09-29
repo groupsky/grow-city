@@ -1,4 +1,14 @@
 <style scoped lang="less">
+  .pop-container {
+    padding-right: 1em;
+  }
+
+  .pop {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 2em;
+  }
+
   .pop:before, .pop:after {
     display: inline;
     font-size: 2em;
@@ -28,7 +38,7 @@
 </style>
 
 <template>
-  <div>
+  <div class="d-flex pop-container">
     <i v-for="pop in population" class="pop" :class="'pop-'+pop.type"></i>
   </div>
 </template>
