@@ -71,8 +71,8 @@
       <template v-for="tile in row">
         <li class="tile">
           <div class="tile-in">
-            <div class="tile-inside">
-              <c-tile v-if="tile" :tile="tile" @clicked="toggleWorked(tile)"></c-tile>
+            <div class="tile-inside" @click.prevent="tileClicked(tile)">
+              <c-tile v-if="tile" :tile="tile"></c-tile>
             </div>
           </div>
         </li>
@@ -93,8 +93,8 @@
       }
     },
     methods: {
-      toggleWorked(tile) {
-        this.game.toggleWorkedTile(tile)
+      tileClicked(tile) {
+        this.$emit('select', tile)
       }
     }
   }

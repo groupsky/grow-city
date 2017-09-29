@@ -29,17 +29,17 @@
 
 <template>
   <ul class="list-inline">
-    <li class="list-inline-item food">
-      <i class="icon icon-food"></i> {{gameState.food}}
-      <sup :class="gameState.foodIncome < 0 && 'negative'">{{gameState.foodIncome | sign}}</sup>
+    <li v-if="hasFood" class="list-inline-item food">
+      <i class="icon icon-food"></i> {{food}}
+      <sup v-if="hasFoodIncome" :class="foodIncome < 0 && 'negative'">{{foodIncome | sign}}</sup>
     </li>
-    <li class="list-inline-item gold">
-      <i class="icon icon-gold"></i> {{gameState.gold}}
-      <sup :class="gameState.goldIncome < 0 && 'negative'">{{gameState.goldIncome | sign}}</sup>
+    <li v-if="hasGold" class="list-inline-item gold">
+      <i class="icon icon-gold"></i> {{gold}}
+      <sup v-if="hasGoldIncome" :class="goldIncome < 0 && 'negative'">{{goldIncome | sign}}</sup>
     </li>
-    <li class="list-inline-item production">
-      <i class="icon icon-production"></i> {{gameState.production}}
-      <sup :class="gameState.productionIncome < 0 && 'negative'">{{gameState.productionIncome | sign}}</sup>
+    <li v-if="hasProduction" class="list-inline-item production">
+      <i class="icon icon-production"></i> {{production}}
+      <sup v-if="hasProductionIncome" :class="productionIncome < 0 && 'negative'">{{productionIncome | sign}}</sup>
     </li>
   </ul>
 </template>
@@ -47,17 +47,39 @@
 <script>
   export default {
     name: 'resourcesBar',
-    inject: [ 'game' ],
-    data() {
-      return {
-        gameState: this.game.state,
-      }
+    props: {
+      food: {},
+      foodIncome: {},
+      gold: {},
+      goldIncome: {},
+      production: {},
+      productionIncome: {},
     },
     filters: {
       sign (value) {
         if (value === 0) return '='
         if (value > 0) return '+' + value
         return value
+      }
+    },
+    computed: {
+      hasFood () {
+        return this.food !== undefined
+      },
+      hasGold () {
+        return this.gold !== undefined
+      },
+      hasProduction () {
+        return this.production !== undefined
+      },
+      hasFoodIncome () {
+        return this.foodIncome !== undefined
+      },
+      hasGoldIncome () {
+        return this.goldIncome !== undefined
+      },
+      hadProductionIncome () {
+        return this.productionIncome !== undefined
       }
     }
   }

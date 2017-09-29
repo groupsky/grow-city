@@ -82,7 +82,7 @@ export default class Map {
         { type: 'plain' },
         { type: 'grass' },
         { type: 'grass', owned: true },
-        { type: 'plain', improvements: { factory: true }, owned: true },
+        { type: 'plain', owned: true },
         { type: 'grass', features: { river: true } },
         { type: 'plain' },
         { type: 'grass' },
