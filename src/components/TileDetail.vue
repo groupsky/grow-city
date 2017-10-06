@@ -20,7 +20,7 @@
     inject: [ 'game' ],
     props: {
       tile: {
-        required: true
+        required: true,
       }
     },
     components: { cResBar },

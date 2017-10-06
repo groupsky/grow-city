@@ -72,7 +72,7 @@
         <li class="tile">
           <div class="tile-in">
             <div class="tile-inside" @click.prevent="tileClicked(tile)">
-              <c-tile v-if="tile" :tile="tile"></c-tile>
+              <c-tile v-if="tile" :tile="tile" :selected="tile===selected"></c-tile>
             </div>
           </div>
         </li>
@@ -89,7 +89,10 @@
     components: { cTile },
     props: {
       map: {
-        required: true
+        required: true,
+      },
+      selected: {
+        required: false,
       }
     },
     methods: {

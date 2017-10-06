@@ -110,10 +110,23 @@
     color: #787;
   }
 
+  .highlight {
+    animation: tile-highlight 0.45s infinite linear alternate;
+  }
+
+  @keyframes tile-highlight {
+    from {
+      background-color: rgba(255, 255, 255, 0.0);
+    }
+    to {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+
 </style>
 
 <template>
-  <div class="tile-container" :class="{owned: tile.owned}" @click="handleClick">
+  <div class="tile-container" :class="{owned: tile.owned, selected: selected}" @click="handleClick">
     <div class="layer background" :class="'type-'+tile.type"></div>
     <div class="layer features">
       <div v-for="(available, feature) in tile.features"
@@ -129,7 +142,7 @@
     </div>
     <div class="layer worked" v-if="tile.worked"></div>
     <div class="layer fog"></div>
-    <div class="layer highlight"></div>
+    <div v-if="selected" class="layer highlight"></div>
   </div>
 </template>
 
@@ -138,9 +151,12 @@
     name: 'tile',
     props: {
       tile: {
-        required: true
+        required: true,
       },
-      improvement: {},
+      selected: {
+        type: Boolean,
+        default: false,
+      },
     },
     methods: {
       handleClick() {

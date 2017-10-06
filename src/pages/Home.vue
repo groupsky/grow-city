@@ -14,7 +14,7 @@
         <c-pop-bar></c-pop-bar>
       </div>
       <div class="col-md-8">
-        <c-map :map="map" @select="onSelectTile"></c-map>
+        <c-map :map="map" @select="onSelectTile" :selected="selectedTile"></c-map>
       </div>
       <div class="col-md-4">
         <c-tile-detail v-if="selectedTile" :tile="selectedTile"></c-tile-detail>
