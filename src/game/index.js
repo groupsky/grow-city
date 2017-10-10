@@ -78,6 +78,13 @@ export default class Game {
     return null
   }
 
+  canWorkOnTile (tile) {
+    if (!tile.owned) return false
+    if (tile.improvements.city) return false
+    if (!this.findPopulationByType('unemployed')) return false
+    return true
+  }
+
   toggleWorkedTile (tile) {
     if (!tile.owned) return
     if (tile.improvements.city) return
