@@ -6,7 +6,7 @@
   .pop {
     flex: 0 1 auto;
     min-width: 0;
-    max-width: 2em;
+    max-width: 4em;
   }
 
   .pop:before, .pop:after {
