@@ -78,7 +78,7 @@
       hasGoldIncome () {
         return this.goldIncome !== undefined
       },
-      hadProductionIncome () {
+      hasProductionIncome () {
         return this.productionIncome !== undefined
       }
     }
