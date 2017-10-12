@@ -120,6 +120,7 @@ export default class Game {
   }
 
   canBuildImprovement (tile, improvement) {
+    if (!tile.owned) return false
     if (!this.canBuy(improvement.cost)) return false
     if (!this.map.checkTerrainCompatible(tile.type, improvement.terrain)) return false
     if (tile.improvements[ improvement.key ]) return false

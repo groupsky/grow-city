@@ -74,7 +74,7 @@
         this.game.toggleWorkedTile(this.tile)
       },
       canBuildImprovement (improvement) {
-        return this.game.canBuy(improvement.cost)
+        return this.game.canBuildImprovement(this.tile, improvement)
       },
       buyImprovement (improvement) {
         this.game.buildImprovement(this.tile, improvement)
