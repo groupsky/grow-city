@@ -1,5 +1,6 @@
 import Map from './Map'
 import config from '../config/general'
+import mapConfig from '../config/map'
 
 const { pow } = Math
 
@@ -26,10 +27,12 @@ export default class Game {
 
   endTurn () {
     this.updateIncome()
-    this.state.turn++
-    this.state.gold += this.state.goldIncome
-    this.state.food += this.state.foodIncome
-    this.state.production += this.state.productionIncome
+    this.apply({
+      turn: 1,
+      gold: this.state.goldIncome,
+      food: this.state.foodIncome,
+      production: this.state.productionIncome,
+    })
     if (this.state.food >= config.foodToGrow * pow(config.foodToGrowExp, this.state.population.length)) {
       this.addPopulation()
       this.state.food = 0
@@ -38,6 +41,7 @@ export default class Game {
       this.state.food = 0
     }
     this.updateIncome()
+    this.save()
   }
 
   addPopulation () {
@@ -107,6 +111,38 @@ export default class Game {
     this.updateIncome()
   }
 
+  canBuy (cost) {
+    for (let key in cost) {
+      if (!cost.hasOwnProperty(key)) continue
+      if (this.state[ key ] < cost[ key ]) return false
+    }
+    return true
+  }
+
+  canBuildImprovement (tile, improvement) {
+    if (!this.canBuy(improvement.cost)) return false
+    if (!this.map.checkTerrainCompatible(tile.type, improvement.terrain)) return false
+    if (tile.improvements[ improvement.key ]) return false
+    return true
+  }
+
+  buildImprovement (tile, improvement) {
+    if (!this.canBuildImprovement(tile, improvement)) return false
+    tile.improvements[ improvement.key ] = true
+    this.apply(improvement.cost, -1)
+    this.updateIncome()
+  }
+
+  apply (change, mply) {
+    if (typeof mply === 'undefined') mply = 1
+    for (let key in change) {
+      if (!change.hasOwnProperty(key)) continue
+      if (!this.state.hasOwnProperty(key)) throw new Error(`Unknown ${key} in game state`)
+      this.state[ key ] += change[ key ] * mply
+    }
+    this.save()
+  }
+
   updateIncome () {
     this.state.foodIncome = 0
     this.state.goldIncome = 0
@@ -127,6 +163,11 @@ export default class Game {
         }
       }
     }
+  }
+
+  save () {
+    console.warn('Saving is not implemented yet!')
+    console.debug('state', JSON.parse(JSON.stringify(this.state)))
   }
 }
 

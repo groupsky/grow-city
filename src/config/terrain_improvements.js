@@ -1,5 +1,6 @@
 export default {
   farm: {
+    class: 'building',
     cost: {
       production: 10,
       gold: 10,
@@ -11,6 +12,7 @@ export default {
     terrain: [ 'grass', 'plain' ],
   },
   mine: {
+    class: 'building',
     cost: {
       production: 30,
       gold: 10,
@@ -22,6 +24,7 @@ export default {
     terrain: [ 'hill', 'mountain' ],
   },
   road: {
+    class: 'transport',
     cost: {
       production: 15,
       gold: 20,
@@ -30,6 +33,7 @@ export default {
     terrain: [ 'grass', 'plain', 'hill', 'mountain' ],
   },
   city: {
+    class: ['building', 'transport'],
     effects: {
       gold: { set: 1 },
       food: { set: 2 },
@@ -38,6 +42,7 @@ export default {
     terrain: [ 'grass', 'plain', 'hill' ],
   },
   factory: {
+    class: 'building',
     cost: {
       production: 150,
       gold: 250,

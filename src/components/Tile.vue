@@ -95,7 +95,9 @@
     text-align: center;
     margin-top: -24px;
     font-weight: normal;
+    color: #aaaaaa;
     text-shadow: 0 0 1px black;
+    content: "?";
   }
 
   .improvement-city:before {
@@ -108,6 +110,35 @@
   .improvement-factory:before {
     content: "🏭";
     color: #787;
+  }
+
+  .improvement-farm:before {
+    content: "🚜";
+  }
+
+  .improvement-road:before {
+    content: "🛣";
+    content: "R";
+  }
+
+  .improvement-church:before {
+    content: "⛪";
+  }
+
+  .improvement-stadium:before {
+    content: "🏟";
+  }
+
+  .improvement-hospital:before {
+    content: "🏥";
+  }
+
+  .improvement-post:before {
+    content: "🏤";
+  }
+
+  .improvement-courthouse:before {
+    content: "🏛";
   }
 
   .highlight {

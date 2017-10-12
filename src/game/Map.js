@@ -139,6 +139,11 @@ export default class Map {
           const improvement = config.improvements[ key ]
           if (!this.checkTerrainCompatible(tile.type, improvement.terrain)) throw new Error(`Improvement ${key} not allowed on terrain ${tile.type}`)
         }
+        for (let key in config.improvements) {
+          if (!config.improvements.hasOwnProperty(key)) continue
+          if (!this.checkTerrainCompatible(tile.type, config.improvements[key].terrain)) continue
+          tile.improvements[key] = tile.improvements[key] || false
+        }
         tile.id = id++
         tile.worked = tile.worked || false
       }
@@ -148,6 +153,31 @@ export default class Map {
 
   checkTerrainCompatible (terrain, allowed) {
     return !allowed || allowed.indexOf(terrain) !== -1
+  }
+
+  improvements (tile) {
+    const res = []
+    const disabledClasses = {}
+    for (let key in tile.improvements || {}) {
+      if (!tile.improvements.hasOwnProperty(key)) continue
+      if (!tile.improvements[key]) continue
+      if (!config.improvements[key]) continue
+      if (!config.improvements[key].class) continue
+      const classes = Array.isArray(config.improvements[key].class) ? config.improvements[key].class : [config.improvements[key].class]
+      for (let i in classes) {
+        if (!classes.hasOwnProperty(i)) continue
+        disabledClasses[ classes[i] ] = true
+      }
+    }
+    for (let key in config.improvements) {
+      if (!config.improvements.hasOwnProperty(key)) continue
+      const i = config.improvements[key]
+      i.key = i.key || key
+      if (disabledClasses[i.class]) continue
+      if (tile && !this.checkTerrainCompatible(tile.type, i.terrain)) continue
+      res.push(i)
+    }
+    return res
   }
 
   applyEffects (output, terrain, effects) {
