@@ -2,8 +2,8 @@ export default {
   farm: {
     class: 'building',
     cost: {
-      production: 10,
-      gold: 10,
+      production: 40,
+      gold: 20,
     },
     effects: {
       'grass.food': { add: 3 },
@@ -14,8 +14,8 @@ export default {
   mine: {
     class: 'building',
     cost: {
-      production: 30,
-      gold: 10,
+      production: 60,
+      gold: 20,
     },
     effects: {
       'mountain.production': { add: 3 },
@@ -26,7 +26,7 @@ export default {
   road: {
     class: 'transport',
     cost: {
-      production: 15,
+      production: 20,
       gold: 20,
     },
     effects: { gold: { add: 1 } },

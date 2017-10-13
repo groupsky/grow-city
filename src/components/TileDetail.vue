@@ -25,7 +25,7 @@
                  :gold="production.gold"
                  :production="production.production"></c-res-bar>
     </b-card-body>
-    <b-list-group flush>
+    <b-list-group flush v-if="tile.owned">
       <b-list-group-item
         v-for="improvement in availableImprovements"
         v-if="improvement.cost && !tile.improvements[improvement.key]">
@@ -43,6 +43,11 @@
         </b-container>
       </b-list-group-item>
     </b-list-group>
+    <b-card-footer v-if="!tile.owned">
+      <b-btn :disabled="!canBuy" @click="buyTile">
+        Buy <c-res-bar :gold="buyCost"></c-res-bar>
+      </b-btn>
+    </b-card-footer>
   </b-card>
 </template>
 
@@ -68,6 +73,12 @@
       availableImprovements () {
         return this.game.map.improvements(this.tile)
       },
+      buyCost () {
+        return this.game.tileBuyCost(this.tile)
+      },
+      canBuy () {
+        return this.game.canBuy({gold: this.buyCost})
+      },
     },
     methods: {
       toggleWorked () {
@@ -78,7 +89,10 @@
       },
       buyImprovement (improvement) {
         this.game.buildImprovement(this.tile, improvement)
-      }
+      },
+      buyTile () {
+        this.game.buyTile(this.tile)
+      },
     },
   }
 </script>

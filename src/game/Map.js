@@ -1,9 +1,23 @@
 import config from '../config/map'
 
+const { abs, max } = Math
+
 export default class Map {
   constructor (savedState) {
     savedState = savedState || {}
     this.tiles = savedState.tiles || this.generateMap(config.radius)
+    for (let r in this.tiles) {
+      const row = this.tiles[ r ]
+      for (let q in row) {
+        const tile = row[ q ]
+        if (!tile) continue
+        if ((tile.improvements || {}).city) {
+          this.centerTile = tile
+          break
+        }
+      }
+      if (this.centerTile) break
+    }
   }
 
   findTileById (tileId) {
@@ -20,6 +34,21 @@ export default class Map {
         }
       }
     }
+  }
+
+  h2c (tile) {
+    const x = tile.q - (tile.r - (tile.r & 1)) / 2
+    const z = tile.r
+    const y = -x - z
+    return { x, y, z }
+  }
+
+  cdist (a, b) {
+    return max(abs(a.x - b.x), abs(a.y - b.y), abs(a.z - b.z))
+  }
+
+  distance (a, b) {
+    return this.cdist(this.h2c(a), this.h2c(b))
   }
 
   generateMap (radius) {
@@ -124,6 +153,8 @@ export default class Map {
       for (let q in row) {
         const tile = row[ q ]
         if (!tile) continue
+        tile.r = +r
+        tile.q = +q
         if (!config.terrain[ tile.type ]) throw new Error(`Unknown terrain type ${tile.type}`)
         tile.features = tile.features || {}
         for (let key in tile.features) {
@@ -141,11 +172,12 @@ export default class Map {
         }
         for (let key in config.improvements) {
           if (!config.improvements.hasOwnProperty(key)) continue
-          if (!this.checkTerrainCompatible(tile.type, config.improvements[key].terrain)) continue
-          tile.improvements[key] = tile.improvements[key] || false
+          if (!this.checkTerrainCompatible(tile.type, config.improvements[ key ].terrain)) continue
+          tile.improvements[ key ] = tile.improvements[ key ] || false
         }
         tile.id = id++
         tile.worked = tile.worked || false
+        tile.owned = tile.owned || false
       }
     }
     return tiles
@@ -160,20 +192,20 @@ export default class Map {
     const disabledClasses = {}
     for (let key in tile.improvements || {}) {
       if (!tile.improvements.hasOwnProperty(key)) continue
-      if (!tile.improvements[key]) continue
-      if (!config.improvements[key]) continue
-      if (!config.improvements[key].class) continue
-      const classes = Array.isArray(config.improvements[key].class) ? config.improvements[key].class : [config.improvements[key].class]
+      if (!tile.improvements[ key ]) continue
+      if (!config.improvements[ key ]) continue
+      if (!config.improvements[ key ].class) continue
+      const classes = Array.isArray(config.improvements[ key ].class) ? config.improvements[ key ].class : [ config.improvements[ key ].class ]
       for (let i in classes) {
         if (!classes.hasOwnProperty(i)) continue
-        disabledClasses[ classes[i] ] = true
+        disabledClasses[ classes[ i ] ] = true
       }
     }
     for (let key in config.improvements) {
       if (!config.improvements.hasOwnProperty(key)) continue
-      const i = config.improvements[key]
+      const i = config.improvements[ key ]
       i.key = i.key || key
-      if (disabledClasses[i.class]) continue
+      if (disabledClasses[ i.class ]) continue
       if (tile && !this.checkTerrainCompatible(tile.type, i.terrain)) continue
       res.push(i)
     }

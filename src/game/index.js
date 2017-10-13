@@ -19,6 +19,7 @@ export default class Game {
       goldIncome: savedState.goldIncome || 0,
       production: savedState.production || 0,
       productionIncome: savedState.productionIncome || 0,
+      boughtTiles: savedState.boughtTiles || 0,
     }
     this.map = new Map(savedState.map)
 
@@ -164,6 +165,25 @@ export default class Game {
         }
       }
     }
+  }
+
+  tileBuyCost (tile) {
+    const distance = this.map.distance(tile, this.map.centerTile)
+    return config.tileCostBase +
+      distance * config.tileCostDistanceCoef +
+      this.state.boughtTiles * config.tileCostBoughtCoef
+  }
+
+  buyTile (tile) {
+    if (tile.owned) return
+    const cost = this.tileBuyCost(tile)
+    if (!this.canBuy({gold: cost})) return false
+    tile.owned = true
+    this.apply({
+      boughtTiles: 1,
+      gold: -cost,
+    })
+    this.save()
   }
 
   save () {
