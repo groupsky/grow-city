@@ -10,9 +10,10 @@
   }
 
   .pop:before, .pop:after {
-    display: inline;
+    display: inline-block;
     font-size: 2em;
     font-style: normal;
+    margin: -0.5em 0;
   }
 
   .pop:nth-child(odd):before {

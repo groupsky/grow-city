@@ -15,29 +15,26 @@
           <b-nav-item>
             Turn: <strong>{{gameState.turn}}</strong>
           </b-nav-item>
+        </b-nav>
 
+        <b-nav is-nav-bar>
+          <b-nav-item>
+            <c-pop-bar></c-pop-bar>
+          </b-nav-item>
         </b-nav>
 
         <b-nav is-nav-bar class="ml-auto">
-          <b-nav-form>
-            <b-button size="sm" variant="outline-primary" type="button" @click="endTurn">End Turn</b-button>
-          </b-nav-form>
+          <b-nav-item>
+            <c-res-bar :gold="gameState.gold" :goldIncome="gameState.goldIncome"
+                       :food="gameState.food" :foodIncome="gameState.foodIncome"
+                       :production="gameState.production" :productionIncome="gameState.productionIncome"></c-res-bar>
+          </b-nav-item>
         </b-nav>
       </b-collapse>
-
     </b-navbar>
 
     <div class="container-fluid">
-
       <div class="row">
-        <div class="col-md-12">
-          <c-res-bar :gold="gameState.gold" :goldIncome="gameState.goldIncome"
-                     :food="gameState.food" :foodIncome="gameState.foodIncome"
-                     :production="gameState.production" :productionIncome="gameState.productionIncome"></c-res-bar>
-        </div>
-        <div class="col-md-12">
-          <c-pop-bar></c-pop-bar>
-        </div>
         <div class="col-md-8">
           <c-map :map="map" @select="onSelectTile" :selected="selectedTile"></c-map>
         </div>
@@ -46,6 +43,14 @@
         </div>
       </div>
     </div>
+
+    <b-navbar class="fixed-bottom" type="inverse" variant="info">
+      <b-nav is-nav-bar class="ml-auto">
+        <b-nav-form>
+          <b-button variant="outline-primary" type="button" @click="endTurn">End Turn</b-button>
+        </b-nav-form>
+      </b-nav>
+    </b-navbar>
   </div>
 </template>
 
@@ -78,6 +83,19 @@
       onSelectTile(tile) {
         this.selectedTile = tile
       }
+    },
+    mounted() {
+      var vm = this
+      window.addEventListener('keydown', function (ev) {
+        console.log(ev)
+        switch (ev.keyCode) {
+          // ENTER
+          case 13:
+            vm.endTurn()
+            ev.preventDefault()
+            return true
+        }
+      })
     }
   }
 </script>
