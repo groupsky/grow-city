@@ -141,6 +141,14 @@
     content: "🏛";
   }
 
+  .improvement-market:before {
+    content: "M"
+  }
+
+  .improvement-granary:before {
+    content: "G"
+  }
+
   .highlight {
     animation: tile-highlight 0.45s infinite linear alternate;
   }

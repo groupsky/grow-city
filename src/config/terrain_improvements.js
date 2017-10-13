@@ -44,11 +44,33 @@ export default {
   factory: {
     class: 'building',
     cost: {
-      production: 150,
-      gold: 250,
+      production: 500,
+      gold: 1000,
     },
-    effects: {
-      production: { mult: 2 },
+    areaEffects: {
+      production: { mult: 1.5 },
+    },
+    terrain: [ 'grass', 'plain', 'hill' ],
+  },
+  granary: {
+    class: 'building',
+    cost: {
+      production: 100,
+      gold: 50,
+    },
+    areaEffects: {
+      food: { mult: 1.5 },
+    },
+    terrain: [ 'grass', 'plain', 'hill' ],
+  },
+  market: {
+    class: 'building',
+    cost: {
+      production: 250,
+      gold: 500,
+    },
+    areaEffects: {
+      gold: { mult: 1.5 },
     },
     terrain: [ 'grass', 'plain', 'hill' ],
   },

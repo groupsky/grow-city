@@ -1,6 +1,15 @@
 import config from '../config/map'
 
-const { abs, max } = Math
+const { abs, ceil, max } = Math
+
+const axialDirections = [
+  { r: +1, q: 0 },
+  { r: +1, q: -1 },
+  { r: 0, q: -1 },
+  { r: -1, q: 0 },
+  { r: 0, q: +1 },
+  { r: -1, q: +1 },
+]
 
 export default class Map {
   constructor (savedState) {
@@ -232,7 +241,7 @@ export default class Map {
             output[ res ] = effect[ op ]
             break
           case 'mult':
-            output[ res ] = (output[ res ] || 0) * effect[ op ]
+            output[ res ] = ceil((output[ res ] || 0) * effect[ op ])
             break
           default:
             throw new Error(`Unknown effect op ${op}`)
@@ -240,6 +249,19 @@ export default class Map {
       }
     }
     return output
+  }
+
+  neighbours (tile) {
+    const res = []
+    let q, r
+    for (let i = 0, l = axialDirections.length; i < l; i++) {
+      r = tile.r + axialDirections[ i ].r
+      q = tile.q + axialDirections[ i ].q
+      if (!this.tiles[ r ]) continue
+      if (!this.tiles[ r ][ q ]) continue
+      res.push(this.tiles[ r ][ q ])
+    }
+    return res
   }
 
   getTileProduction (tile) {
@@ -263,7 +285,21 @@ export default class Map {
       if (!tile.improvements[ improvement ]) continue
       const improvementDef = config.improvements[ improvement ]
       if (!improvementDef) throw new Error(`Unknown terrain improvement ${improvement}`)
+      if (!improvementDef.effects) continue
       this.applyEffects(output, tile.type, improvementDef.effects)
+    }
+    const neightbours = this.neighbours(tile)
+    for (let i = 0, l = neightbours.length; i < l; i++) {
+      const neighbour = neightbours[i]
+      if (!neighbour.worked) continue
+      for (let improvement in neighbour.improvements) {
+        if (!neighbour.improvements.hasOwnProperty(improvement)) continue
+        if (!neighbour.improvements[ improvement ]) continue
+        const improvementDef = config.improvements[ improvement ]
+        if (!improvementDef) throw new Error(`Unknown terrain improvement ${improvement}`)
+        if (!improvementDef.areaEffects) continue
+        this.applyEffects(output, tile.type, improvementDef.areaEffects)
+      }
     }
     return output
   }
