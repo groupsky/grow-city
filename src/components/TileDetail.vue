@@ -37,15 +37,20 @@
                          :production="improvement.cost.production"></c-res-bar>
             </b-col>
             <b-col>
-              <b-btn :disabled="!canBuildImprovement(improvement)" @click="buyImprovement(improvement)">Buy</b-btn>
+              <b-btn :disabled="!canBuildImprovement(improvement)"
+                     @click="buyImprovement(improvement)"
+                     :variant="(canBuildImprovement(improvement)?'primary':'')">
+                Buy
+              </b-btn>
             </b-col>
           </b-row>
         </b-container>
       </b-list-group-item>
     </b-list-group>
-    <b-card-footer v-if="!tile.owned">
-      <b-btn :disabled="!canBuy" @click="buyTile">
-        Buy <c-res-bar :gold="buyCost"></c-res-bar>
+    <b-card-footer v-if="buyable">
+      <b-btn :disabled="!canBuy" @click="buyTile" variant="outline-primary">
+        Buy
+        <c-res-bar :gold="buyCost"></c-res-bar>
       </b-btn>
     </b-card-footer>
   </b-card>
@@ -77,8 +82,11 @@
         return this.game.tileBuyCost(this.tile)
       },
       canBuy () {
-        return this.game.canBuy({gold: this.buyCost})
+        return this.game.canBuy({ gold: this.buyCost })
       },
+      buyable () {
+        return this.game.tileBuyable(this.tile)
+      }
     },
     methods: {
       toggleWorked () {

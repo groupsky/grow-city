@@ -174,10 +174,30 @@ export default class Game {
       this.state.boughtTiles * config.tileCostBoughtCoef
   }
 
-  buyTile (tile) {
+  tileBuyable (tile) {
     if (tile.owned) return
+    const neighbours = this.map.neighbours(tile)
+    let hasOwnedNeighbour = false
+    for (let i = 0, l = neighbours.length; i < l; i++) {
+      if (neighbours[ i ].owned) {
+        hasOwnedNeighbour = true
+        break
+      }
+    }
+    if (!hasOwnedNeighbour) return false
+
+    return true
+  }
+
+  canBuyTile (tile) {
     const cost = this.tileBuyCost(tile)
-    if (!this.canBuy({gold: cost})) return false
+    if (!this.canBuy({ gold: cost })) return false
+    return this.tileBuyable(tile)
+  }
+
+  buyTile (tile) {
+    if (this.canBuyTile(tile)) return
+    const cost = this.tileBuyCost(tile)
     tile.owned = true
     this.apply({
       boughtTiles: 1,
