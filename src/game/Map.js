@@ -233,15 +233,16 @@ export default class Map {
       const effect = effects[ effectKey ]
       for (let op in effect) {
         if (!effect.hasOwnProperty(op)) continue
+        output[ res ] = output[ res ] || { val: 0, mul: 1 }
         switch (op) {
           case 'add':
-            output[ res ] = (output[ res ] || 0) + effect[ op ]
+            output[ res ].val += effect[ op ]
             break
           case 'set':
-            output[ res ] = effect[ op ]
+            output[ res ].fin = effect[ op ]
             break
           case 'mult':
-            output[ res ] = ceil((output[ res ] || 0) * effect[ op ])
+            output[ res ].mul += effect[ op ] - 1
             break
           default:
             throw new Error(`Unknown effect op ${op}`)
@@ -271,7 +272,8 @@ export default class Map {
     let key
     for (key in terrainDef) {
       if (!terrainDef.hasOwnProperty(key)) continue
-      output[ key ] = (output[ key ] || 0) + terrainDef[ key ]
+      output[ key ] = output[ key ] || { val: 0, mul: 1 }
+      output[ key ].val += terrainDef[ key ]
     }
     for (let feature in tile.features) {
       if (!tile.features.hasOwnProperty(feature)) continue
@@ -290,7 +292,7 @@ export default class Map {
     }
     const neightbours = this.neighbours(tile)
     for (let i = 0, l = neightbours.length; i < l; i++) {
-      const neighbour = neightbours[i]
+      const neighbour = neightbours[ i ]
       if (!neighbour.worked) continue
       for (let improvement in neighbour.improvements) {
         if (!neighbour.improvements.hasOwnProperty(improvement)) continue
@@ -301,6 +303,11 @@ export default class Map {
         this.applyEffects(output, tile.type, improvementDef.areaEffects)
       }
     }
-    return output
+    const res = {}
+    for (let key in output) {
+      if (!output.hasOwnProperty(key)) continue
+      res[ key ] = ceil((output[ key ].fin || output[ key ].val || 0) * (output[ key ].mul || 1))
+    }
+    return res
   }
 }
