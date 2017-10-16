@@ -94,6 +94,11 @@
             vm.endTurn()
             ev.preventDefault()
             return true
+          // SPACE
+          case 32:
+            if (!vm.selectedTile) return
+            vm.game.toggleWorkedTile(vm.selectedTile)
+            return true
         }
       })
     }
